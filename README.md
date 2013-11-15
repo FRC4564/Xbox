@@ -1,7 +1,7 @@
 xbox.py
 =======
 
-Python class to support reading xbox 360 controller input under Linux.  Makes it easy to get real-time input from controller buttons, analog sticks and triggers.  Built and tested on RaspberryPi running Raspbian.
+Python class to support reading xbox 360 wired and wireless controller input under Linux.  Makes it easy to get real-time input from controller buttons, analog sticks and triggers.  Built and tested on RaspberryPi running Raspbian.
 
 Requires that xboxdrv be installed first:
 
@@ -22,4 +22,4 @@ Example usage:
     
     joy.close()                   #Cleanup before exit
 
-Note: Requires sudo privileges to gain access to USB
+Note: Run with sudo privileges to allow xboxdrv necessary access to USB device
