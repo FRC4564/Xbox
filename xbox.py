@@ -232,7 +232,8 @@ class Joystick:
 
     # Returns tuple containing X and Y axis values for Right stick scaled between -1.0 to 1.0
     # Usage:
-    #     x,y = joy.rightStick()    def rightStick(self,deadzone=4000):
+    #     x,y = joy.rightStick() 
+    def rightStick(self,deadzone=4000):
         self.refresh()
         return (self.rightX(deadzone),self.rightY(deadzone))
 
