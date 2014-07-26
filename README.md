@@ -7,9 +7,17 @@ Requires that xboxdrv be installed first:
 
     sudo apt-get install xboxdrv
 
+To test the driver, issue the following command and see if the controller inputs are recognized
+
+    sudo xboxdrv --detach-kernel-driver
+
 See http://pingus.seul.org/~grumbel/xboxdrv/ for details on xboxdrv
 
-Example usage:
+Once the driver is installed, you can run the sample code to see how the Python classs module works.
+
+    sudo python sample.py
+
+Example class usage:
 
     import xbox
     joy = xbox.Joystick()         #Initialize joystick
