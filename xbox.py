@@ -48,9 +48,9 @@ class Joystick:
         self.refreshTime = 0	#absolute time when next refresh (read results from xboxdrv stdout pipe) is to occur
 	self.refreshDelay = 1.0 / refreshRate   #joystick refresh is to be performed 30 times per sec by default
 	#
-	# Read responses from 'xboxdrv' for 1/4 sec, looking for either controller/receiver
+	# Read responses from 'xboxdrv' for 2 secs, looking for controller/receiver to respond
 	found = False
-        waitTime = time.time() + 0.5
+        waitTime = time.time() + 2.0
 	while waitTime > time.time():
             readable, writeable, exception = select.select([self.pipe],[],[],0)
             if readable:
