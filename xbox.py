@@ -118,13 +118,13 @@ class Joystick:
     # Right stick X axis value scaled between -1.0 (left) and 1.0 (right)
     def rightX(self,deadzone=4000):
         self.refresh()
-        raw = int(self.reading[25:30])
+        raw = int(self.reading[24:30])
         return self.axisScale(raw,deadzone)
 
     # Right stick Y axis value scaled between -1.0 (down) and 1.0 (up)
     def rightY(self,deadzone=4000):
         self.refresh()
-        raw = int(self.reading[35:40])
+        raw = int(self.reading[34:40])
         return self.axisScale(raw,deadzone)
 
     # Scale raw (-32768 to +32767) axis with deadzone correcion
