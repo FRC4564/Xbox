@@ -1,24 +1,61 @@
 import xbox
-import time
 
-# Setup joystick
+# Format floating point number to string format -x.xxx
+def fmtFloat(n):
+    return '{:6.3f}'.format(n)
+    
 joy = xbox.Joystick()
 
-try:
-    #Valid connect may require joystick input to occur
-    print "Waiting for Joystick to connect"
-    while not joy.connected():
-        time.sleep(0.10)
-
-    #Show misc inputs until Back button is pressed    
-    while not joy.Back() and joy.connected():
-        print joy.connected(),"ABXY",joy.A(),joy.B(),joy.X(),joy.Y(), \
-              "DPAD",joy.dpadLeft(), joy.dpadRight(), joy.dpadUp(), joy.dpadDown(), \
-              "START",joy.Start(),"LEFT THUMBSTICK", joy.leftThumbstick(), \
-              "LEFT X/Y",joy.leftX(),joy.leftY(),"RIGHT TRIGGER",joy.rightTrigger()
-        time.sleep(0.10)
-
-finally:
-    #Always close out so that xboxdrv subprocess ends
-    joy.close()
-    print "Done."
+print "Xbox controller sample: Press Back button to exit"
+# Loop until back button is pressed
+while not joy.Back():
+    # Show connection status
+    if joy.connected():
+        print "Connected   ",
+    else:
+        print "Disconnected",
+    # Left analog stick
+    print "Lx,Ly ",fmtFloat(joy.leftX()),fmtFloat(joy.leftY()),
+    # Right trigger
+    print "Rtrg ",fmtFloat(joy.rightTrigger()),
+    # A/B/X/Y buttons
+    print "Buttons ",
+    if joy.A():
+        print "A",
+    else:
+        print " ",
+    if joy.B():
+        print "B",
+    else:
+        print " ",
+    if joy.X():
+        print "X",
+    else:
+        print " ",
+    if joy.Y():
+        print "Y",
+    else:
+        print " ",
+    # Dpad U/D/L/R
+    print "Dpad ",
+    if joy.dpadUp():
+        print "U",
+    else:
+        print " ",
+    if joy.dpadDown():
+        print "D",
+    else:
+        print " ",
+    if joy.dpadLeft():
+        print "L",
+    else:
+        print " ",
+    if joy.dpadRight():
+        print "R",
+    else:
+        print " ",
+        
+    # Move cursor back to start of line
+    print chr(13),
+# Close out when done
+joy.close()

@@ -39,19 +39,19 @@ class Joystick:
         joy = xbox.Joystick()
     """
     def __init__(self,refreshRate = 30):
-        self.proc = subprocess.Popen(['xboxdrv','--no-uinput'], stdout=subprocess.PIPE)
+        self.proc = subprocess.Popen(['xboxdrv','--no-uinput','--detach-kernel-driver'], stdout=subprocess.PIPE)
         self.pipe = self.proc.stdout
         #
         self.connectStatus = False  #will be set to True once controller is detected and stays on
         self.reading = '0' * 140    #initialize stick readings to all zeros
         #
-        self.refreshTime = 0	#absolute time when next refresh (read results from xboxdrv stdout pipe) is to occur
-	self.refreshDelay = 1.0 / refreshRate   #joystick refresh is to be performed 30 times per sec by default
-	#
-	# Read responses from 'xboxdrv' for 2 secs, looking for controller/receiver to respond
-	found = False
-        waitTime = time.time() + 2.0
-	while waitTime > time.time():
+        self.refreshTime = 0    #absolute time when next refresh (read results from xboxdrv stdout pipe) is to occur
+        self.refreshDelay = 1.0 / refreshRate   #joystick refresh is to be performed 30 times per sec by default
+        #
+        # Read responses from 'xboxdrv' for upto 2 seconds, looking for controller/receiver to respond
+        found = False
+        waitTime = time.time() + 2
+        while waitTime > time.time() and not found:
             readable, writeable, exception = select.select([self.pipe],[],[],0)
             if readable:
                 response = self.pipe.readline()
@@ -64,6 +64,7 @@ class Joystick:
                 # If we see 140 char line, we are seeing valid input
                 if len(response) == 140:
                     found = True
+                    self.connectStatus = True
                     self.reading = response
         # if the controller wasn't found, then halt
         if not found:
@@ -75,9 +76,9 @@ class Joystick:
     If a valid event response is found, then the controller is flagged as 'connected'.
     """
     def refresh(self):
-	# Refresh the joystick readings based on regular defined freq
-	if self.refreshTime < time.time():
-	    self.refreshTime = time.time() + self.refreshDelay  #set next refresh time
+        # Refresh the joystick readings based on regular defined freq
+        if self.refreshTime < time.time():
+            self.refreshTime = time.time() + self.refreshDelay  #set next refresh time
             # If there is text available to read from xboxdrv, then read it.
             readable, writeable, exception = select.select([self.pipe],[],[],0)
             if readable:
@@ -95,9 +96,15 @@ class Joystick:
                 else:  #Any other response means we have lost wireless or controller battery
                     self.connectStatus = False
 
-    """Returns controller connection status of True, if controller is sending valid responses.
-    Loss of wireless signal or battery power will break connection.  An inital controller input,
-    stick movement or button press, is needed before the connection status goes True.
+    """Return a status of True, when the controller is actively connected.
+    Either loss of wireless signal or controller powering off will break connection.  The
+    controller inputs will stop updating, so the last readings will remain in effect.  It is
+    good practice to only act upon inputs if the controller is connected.  For instance, for
+    a robot, stop all motors if "not connected()".
+    
+    An inital controller input, stick movement or button press, may be required before the connection
+    status goes True.  If a connection is lost, the connection will resume automatically when the
+    fault is corrected.
     """
     def connected(self):
         self.refresh()
