@@ -18,7 +18,7 @@ Download the python module and sample code with the following:
     wget https://raw.githubusercontent.com/FRC4564/Xbox/master/xbox.py
     wget https://raw.githubusercontent.com/FRC4564/Xbox/master/sample.py
 
-You can run the sample code to see how to use the Joystick class works.
+You can run the sample code to see how the Joystick class works.
 
     sudo python sample.py
 
@@ -35,4 +35,18 @@ Example class usage:
     
     joy.close()                   #Cleanup before exit
 
-Note: Run with sudo privileges to allow xboxdrv necessary access to USB device
+Note:
+Running with sudo privileges to allow xboxdrv necessary control over USB devices.
+If you want, you can provide your user account with the proper access, so you needn't use sudo.
+
+First, add your user to the root group. Here's how to do this for the user ‘pi’
+
+    sudo usermod -a -G root pi
+
+Create a permissions file using the nano text editor.
+
+    sudo nano /etc/udev/rules.d/55-permissions-uinput.rules
+
+Enter the following rule and save your entry.
+
+    KERNEL=="uinput", MODE="0660", GROUP="root"
