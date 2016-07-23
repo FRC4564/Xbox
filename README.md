@@ -13,7 +13,12 @@ To test the driver, issue the following command and see if the controller inputs
 
 See http://pingus.seul.org/~grumbel/xboxdrv/ for details on xboxdrv
 
-Once the driver is installed, you can run the sample code to see how the Python classs module works.
+Download the python module and sample code with the following:
+
+    wget https://raw.githubusercontent.com/FRC4564/Xbox/master/xbox.py
+    wget https://raw.githubusercontent.com/FRC4564/Xbox/master/sample.py
+
+You can run the sample code to see how to use the Joystick class works.
 
     sudo python sample.py
 
