@@ -36,7 +36,7 @@ Example class usage:
     joy.close()                   #Cleanup before exit
 
 Note:
-Running with sudo privileges to allow xboxdrv necessary control over USB devices.
+Run your code with sudo privileges to allow xboxdrv the necessary control over USB devices.
 If you want, you can provide your user account with the proper access, so you needn't use sudo.
 
 First, add your user to the root group. Here's how to do this for the user ‘pi’
@@ -50,3 +50,14 @@ Create a permissions file using the nano text editor.
 Enter the following rule and save your entry.
 
     KERNEL=="uinput", MODE="0660", GROUP="root"
+
+Troubleshooting
+---------------
+
+I find that xboxdrv occasionally has trouble connecting to the controller.  You may see a USB device error or something similar.  Issuing the following command will detach and reconnect the controller.
+
+    sudo xboxdrv --detach-kernel-driver
+    
+You should now be able to move the joysticks and press buttons to see the controller state display for all inputs.  Just press Ctrl-C to exit and then relaunch your python code that uses xbox.py.
+
+If your wireless controller still won't connect, press the sync button on the controller and the receiver (both devices need to be powered).
