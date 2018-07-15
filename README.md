@@ -61,3 +61,8 @@ I find that xboxdrv occasionally has trouble connecting to the controller.  You 
 You should now be able to move the joysticks and press buttons to see the controller state display for all inputs.  Just press Ctrl-C to exit and then relaunch your python code that uses xbox.py.
 
 If your wireless controller still won't connect, press the sync button on the controller and the receiver (both devices need to be powered).
+
+Usage
+-----
+
+A good application for an XBox controller is for robot control.  Check out [Basic PiBot](https://github.com/FRC4564/BasicPiBot) for more details.
