@@ -1,8 +1,9 @@
 """ Xbox 360 controller support for Python
 11/9/13 - Steven Jacobs
 
-This class module supports reading a connected xbox controller.
-It requires that xboxdrv be installed first:
+This class module supports reading a connected Xbox controller under Python 2 and 3.
+
+You'll need to first install xboxdrv:
 
     sudo apt-get install xboxdrv
 
@@ -20,10 +21,11 @@ Example usage:
     trigger  = joy.rightTrigger() #Right trigger position (values 0 to 1.0)
     
     joy.close()                   #Cleanup before exit
+
+All controller buttons are supported.  See code for all functions.
 """
 
 import subprocess
-import os
 import select
 import time
 
@@ -39,7 +41,7 @@ class Joystick:
         joy = xbox.Joystick()
     """
     def __init__(self,refreshRate = 30):
-        self.proc = subprocess.Popen(['xboxdrv','--no-uinput','--detach-kernel-driver'], stdout=subprocess.PIPE)
+        self.proc = subprocess.Popen(['xboxdrv','--no-uinput','--detach-kernel-driver'], stdout=subprocess.PIPE, bufsize=0)
         self.pipe = self.proc.stdout
         #
         self.connectStatus = False  #will be set to True once controller is detected and stays on
@@ -56,10 +58,10 @@ class Joystick:
             if readable:
                 response = self.pipe.readline()
                 # Hard fail if we see this, so force an error
-                if response[0:7] == 'No Xbox':
+                if response[0:7] == b'No Xbox':
                     raise IOError('No Xbox controller/receiver found')
                 # Success if we see the following
-                if response[0:12].lower() == 'press ctrl-c':
+                if response[0:12].lower() == b'press ctrl-c':
                     found = True
                 # If we see 140 char line, we are seeing valid input
                 if len(response) == 140:
@@ -246,4 +248,4 @@ class Joystick:
 
     # Cleanup by ending the xboxdrv subprocess
     def close(self):
-        os.system('pkill xboxdrv')
+        self.proc.kill()
